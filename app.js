@@ -40,6 +40,22 @@ app.get('/testdb', async (req, res) => {
     res.json(result.rows);
 })
 
+app.put('/updateuser/:id', async(req, res) => {
+  const { id } = req.params;
+  const {age } = req.body;
+  const result = await pool.query(
+    'UPDATE users SET age = $1 WHERE id = $2 RETURNING *',
+    [age, id]
+  )
+  res.json({ message: "USer updated", user: result.rows[0]})
+})
+
+app.delete('/deleteuser/:id', async(req, res) => {
+  const { id } = req.params;
+  await pool.query('DELETE FROM users WHERE id = $1', [id])
+  res.json({ message: "User deleted" })
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
