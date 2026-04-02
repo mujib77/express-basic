@@ -1,9 +1,11 @@
 const pool = require('./db');
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const port = 3000;
 
 app.use(express.json())
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -54,6 +56,7 @@ app.delete('/deleteuser/:id', async(req, res) => {
   const { id } = req.params;
   await pool.query('DELETE FROM users WHERE id = $1', [id])
   res.json({ message: "User deleted" })
+
 })
 
 app.listen(port, () => {
